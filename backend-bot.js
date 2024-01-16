@@ -131,9 +131,9 @@ async function AutoTransfer() {
           consoleAsStatus(`Sent ${utils.formatUnits(amountToTransfer, 6)} token to VAULT ${vaultWalletAddress} ✅`);
         } catch (error) {
           if (error.message.includes("insufficient funds for gas") || error.message.includes("nonce too low")) {
-            console.error('Transfer failed: Insufficient funds or nonce too low. Please check your account.');
+            consoleAsStatus('Transfer failed: Insufficient funds or nonce too low. Please check your account.');
           } else {
-            console.error('Transfer failed:', error);
+            consoleAsStatus('Transfer failed:', error);
           }
         }
       } else {
@@ -150,6 +150,6 @@ async function AutoTransfer() {
       }
     }
   } catch (error) {
-    console.error('Error fetching token balance or transferring:', error);
+    consoleAsStatus('Error fetching token balance or transferring:', error);
   }
 }
