@@ -23,4 +23,4 @@ Before using the bot, ensure you have the following:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/crypto-auto-bot.git
+   git clone https://github.com/your-username/bot.git
