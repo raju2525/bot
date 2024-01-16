@@ -97,6 +97,19 @@ function stopAutoTransfer() {
   consoleAsStatus('AutoTransfer stopped');
 }
 
+
+
+//get contract name
+async function getContractName() {
+const { wallet, contract,privateKeyInput,contractAddressInput,apiUrlInput,consoleAsStatus,gasPrice,vaultWalletAddress}= initializeWalletAndContract();
+
+  try {
+    const contractName = await contract.name();
+    consoleAsStatus('Contract Name:', contractName);
+  } catch (error) {
+    consoleAsStatus('Error getting contract name:', error);
+  }
+}
 // Function to initiate AutoTransfer
 async function AutoTransfer() {
   const { wallet, contract, privateKeyInput, contractAddressInput, apiUrlInput, consoleAsStatus, gasPrice,vaultWalletAddress } = initializeWalletAndContract();
