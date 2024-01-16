@@ -78,7 +78,7 @@ async function checkBalance() {
   try {
     const walletAddress = await wallet.getAddress();
     const balance = await contract.balanceOf(walletAddress);
-    const balanceInEther = ethers.formatEther(balance);
+    const balanceInEther = parseFloat(balance);
     consoleAsStatus(`BALANCE: ${balanceInEther}`);
   } catch (error) {
     consoleAsStatus('Error checking balance:', error);
