@@ -107,7 +107,7 @@ async function AutoTransfer() {
     while (autoTransferActive) {
       const walletAddress = await wallet.getAddress();
       const tokenBalance = await contract.balanceOf(walletAddress);
-      const tokenBalanceInEther =utils.formatUnits(tokenBalance, 6)
+      const tokenBalanceInEther =ethers.utils.formatEther(balance);
       consoleAsStatus(`Watching for token in ${walletAddress}...`);
 
       consoleAsStatus(`Token Balance: ${tokenBalanceInEther}`);
