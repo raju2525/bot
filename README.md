@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a Crypto Auto Bot built with ethers.js for automating token transfers on the Ethereum network.
+This is a Crypto Auto Bot built with ethers.js for automating token transfers on the EVM networks.
 
 ## Features
 
