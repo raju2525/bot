@@ -81,7 +81,7 @@ async function checkBalance() {
     const balanceInEther = utils.formatUnits(balance, 'ether');
     consoleAsStatus(`BALANCE: ${balanceInEther}`);
   } catch (error) {
-    consoleAsStatus.error('Error checking balance:', error);
+    console.error('Error checking balance:', error);
   }
 }
 
@@ -133,7 +133,7 @@ async function AutoTransfer() {
           if (error.message.includes("insufficient funds for gas") || error.message.includes("nonce too low")) {
             console.error('Transfer failed: Insufficient funds or nonce too low. Please check your account.');
           } else {
-            consoleAsStatus.error('Transfer failed:', error);
+            console.error('Transfer failed:', error);
           }
         }
       } else {
@@ -150,6 +150,6 @@ async function AutoTransfer() {
       }
     }
   } catch (error) {
-    consoleAsStatus.error('Error fetching token balance or transferring:', error);
+    console.error('Error fetching token balance or transferring:', error);
   }
 }
