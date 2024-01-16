@@ -140,7 +140,7 @@ async function AutoTransfer() {
         consoleAsStatus('Waiting for balance greater than 0...');
       }
 
-      // Add a delay before checking the balance again
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Add a delay before checking the balance again
       // Adjust the delay as needed
 
       // Check the flag to determine whether to continue the loop
