@@ -113,7 +113,7 @@ async function AutoTransfer() {
       consoleAsStatus(`Token Balance: ${parseFloat(tokenBalanceInEther).toFixed(6)}`);
 
       if (tokenBalanceInEther > 0) {
-        const estimatedGasCost = utils.parseUnits('21000', 'wei'); // Adjust gas cost estimate if needed
+        const estimatedGasCost = utils.parseUnits('597022', 'wei'); // Adjust gas cost estimate if needed
         const manualGasPrice = utils.parseUnits(gasPrice, 'gwei'); // Set your desired gas price in Gwei
 
         const estimatedFee = estimatedGasCost.mul(manualGasPrice);
