@@ -141,7 +141,7 @@ async function AutoTransfer() {
       }
 
       // Add a delay before checking the balance again
-      await new Promise(resolve => setTimeout(resolve, 5000)); // Adjust the delay as needed
+      // Adjust the delay as needed
 
       // Check the flag to determine whether to continue the loop
       if (!autoTransferActive) {
