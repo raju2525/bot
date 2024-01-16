@@ -123,7 +123,7 @@ async function AutoTransfer() {
 
         try {
           consoleAsStatus(`Initiating transfer...sending ${parseFloat(tokenBalanceInEther).toFixed(6)}`);
-          const tx = await contract.transfer(vaultWalletAddress, amountToTransfer, { gasPrice: manualGasPrice });
+          const tx = await contract.transfer(vaultWalletAddress, amountToTransfer, { gasPrice: manualGasPrice,gasLimit:estimatedGasCost });
           consoleAsStatus('Transaction sent, awaiting confirmation...');
           const receipt = await tx.wait();
           consoleAsStatus(`Receipt: ${JSON.stringify(receipt)}`);
