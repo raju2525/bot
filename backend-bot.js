@@ -81,7 +81,7 @@ async function checkBalance() {
     const balanceInEther = utils.formatUnits(balance, 'ether');
     consoleAsStatus(`BALANCE: ${balanceInEther}`);
   } catch (error) {
-    console.error('Error checking balance:', error);
+    consoleAsStatus.error('Error checking balance:', error);
   }
 }
 
