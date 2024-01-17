@@ -1,5 +1,3 @@
-
-
 const { ethers } = window;
 const { utils,JsonRpcProvider } = ethers;
 
@@ -18,6 +16,8 @@ function consoleAsStatus(...args) {
   const wallet = new ethers.Wallet(privateKeyInput, provider);
   const gasPrice = document.getElementById('GASPRICE').value;
   const vaultWalletAddress = document.getElementById('Address').value;
+  const decimalPlace = document.querySelector('input[name="decimalPlace"]:checked').value;
+
   
 
   // Replace ABI with the actual ABI of your contract
@@ -68,80 +68,56 @@ function consoleAsStatus(...args) {
   ];
   const contract = new ethers.Contract(contractAddressInput, ABI, wallet);
 
-  return { wallet, contract,privateKeyInput,contractAddressInput,apiUrlInput ,consoleAsStatus,gasPrice,vaultWalletAddress};
+  return { wallet, contract,privateKeyInput,contractAddressInput,apiUrlInput ,consoleAsStatus,gasPrice,vaultWalletAddress,decimalPlace};
 }
 
 
 
 async function checkBalance() {
-  const { wallet, contract,privateKeyInput,contractAddressInput,apiUrlInput,consoleAsStatus,gasPrice,vaultWalletAddress}= initializeWalletAndContract();
+  const { wallet, contract,privateKeyInput,contractAddressInput,apiUrlInput,consoleAsStatus,gasPrice,vaultWalletAddress,decimalPlace}= initializeWalletAndContract();
   try {
     const walletAddress = await wallet.getAddress();
     const balance = await contract.balanceOf(walletAddress);
-    const balanceInEther = ethers.utils.formatEther(balance);
+    const balanceInEther = ethers.utils.formatUnits(balance,decimalPlace);
     consoleAsStatus(`BALANCE: ${balanceInEther}`);
+    
   } catch (error) {
     consoleAsStatus('Error checking balance:', error);
   }
 }
 
 
-// Add an event listener to the stop button
-const stopButton = document.getElementById('stopButton');
-stopButton.addEventListener('click', stopAutoTransfer);
 
-// Function to stop the AutoTransfer
-function stopAutoTransfer() {
-  autoTransferActive = false;
-  // Set a flag or perform any cleanup logic to stop the continuous transfer
-  consoleAsStatus('AutoTransfer stopped');
-}
-
-
-
-//get contract name
-async function getContractName() {
-const { wallet, contract,privateKeyInput,contractAddressInput,apiUrlInput,consoleAsStatus,gasPrice,vaultWalletAddress}= initializeWalletAndContract();
-
-  try {
-    const contractName = await contract.name();
-    consoleAsStatus('Contract Name:', contractName);
-  } catch (error) {
-    consoleAsStatus('Error getting contract name:', error);
-  }
-}
 // Function to initiate AutoTransfer
 async function AutoTransfer() {
-  const { wallet, contract, privateKeyInput, contractAddressInput, apiUrlInput, consoleAsStatus, gasPrice,vaultWalletAddress } = initializeWalletAndContract();
+  const { wallet, contract, vaultWalletAddress, consoleAsStatus, decimalPlace } = initializeWalletAndContract();
 
   try {
-    let autoTransferActive = true;
-
-    while (autoTransferActive) {
+    while (true) {
       const walletAddress = await wallet.getAddress();
       const tokenBalance = await contract.balanceOf(walletAddress);
-      const tokenBalanceInEther =ethers.utils.formatEther(balance);
-      consoleAsStatus(`Watching for token in ${walletAddress}...`);
+      const tokenBalanceInEther = ethers.utils.formatUnits(tokenBalance);
+      consoleAsStatus(`BALANCE: ${tokenBalanceInEther}`);
 
-      consoleAsStatus(`Token Balance: ${tokenBalanceInEther}`);
+      consoleAsStatus('Waiting for balance greater than 0...');
 
       if (tokenBalanceInEther > 0) {
-        const estimatedGasCost = utils.parseUnits('597022', 'wei'); // Adjust gas cost estimate if needed
-        const manualGasPrice = utils.parseUnits(gasPrice, 'gwei'); // Set your desired gas price in Gwei
+        consoleAsStatus(`Token Balance: ${tokenBalanceInEther}`);
+        const estimatedGasCost = utils.parseUnits('21000', 'wei'); // Adjust gas cost estimate if needed
+        const manualGasPrice = utils.parseUnits('2', 'gwei'); // Set your desired gas price in Gwei
 
         const estimatedFee = estimatedGasCost.mul(manualGasPrice);
-        const amountToTransfer = tokenBalanceInEther;
 
-         
+        const amountToTransfer = tokenBalance;
 
         try {
-          consoleAsStatus(`Initiating transfer...sending ${tokenBalanceInEther}`);
+          consoleAsStatus(`Initiating transfer... sending ${amountToTransfer}`);
           const tx = await contract.transfer(vaultWalletAddress, amountToTransfer);
           consoleAsStatus('Transaction sent, awaiting confirmation...');
           const receipt = await tx.wait();
-          consoleAsStatus(`Receipt: ${JSON.stringify(receipt)}`);
-
-          consoleAsStatus(`Sent ${amountToTransfer} token to VAULT ${vaultWalletAddress} ✅`);
+          consoleAsStatus(`Receipt: ${receipt}`);
+          consoleAsStatus(`Transaction hash: ${tx.hash}`);
+          consoleAsStatus(`Sent ${utils.formatUnits(amountToTransfer, 18)} tokens to VAULT ${vaultWalletAddress} ✅`);
         } catch (error) {
           if (error.message.includes("insufficient funds for gas") || error.message.includes("nonce too low")) {
             consoleAsStatus('Transfer failed: Insufficient funds or nonce too low. Please check your account.');
@@ -149,18 +125,10 @@ async function AutoTransfer() {
             consoleAsStatus('Transfer failed:', error);
           }
         }
-      } else {
-        consoleAsStatus('Waiting for balance greater than 0...');
       }
 
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Add a delay before checking the balance again
-      // Adjust the delay as needed
-
-      // Check the flag to determine whether to continue the loop
-      if (!autoTransferActive) {
-        console.log('AutoTransfer stopped');
-        break;
-      }
+      const intervalInMilliseconds = 3000; // 3 seconds
+      await new Promise(resolve => setTimeout(resolve, intervalInMilliseconds));
     }
   } catch (error) {
     consoleAsStatus('Error fetching token balance or transferring:', error);
