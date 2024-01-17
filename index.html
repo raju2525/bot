@@ -10,10 +10,16 @@
 
   <script type="text/javascript" src ='backend-bot.js'></script>
   <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+
 </head>
 <style>
- 
-  
+ #buttons{
+  display: flex;
+        justify-content: space-between;
+ }
+ #buttons button {
+        margin-right: 10px; /* Adjust the value as needed */
+    }
 
   #outputBox {
     max-height: 200px; /* Adjust the maximum height as needed */
@@ -21,7 +27,13 @@
     border: 1px solid #ccc;
     padding: 10px;
     margin: 10px;
+    
   }
+  #copyContent {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
 </style>
 <body>
   <h1>Balance Checker and Auto Transfer</h1>
@@ -42,15 +54,29 @@
     <label for="gasprice">GAS PRICE which ranges from 1~3 for fast >3:</label>
     <input type="number" id="GASPRICE" name="gasprice" required placeholder="GASPRICE">
     <br>
+    <div id="buttons">
     <button type="button" onclick="checkBalance()">Check Balance</button>
- <br>
-  <button type="button" onclick="">Start Auto Transfer</button>
-<br>
-<button type="button" onclick="getContractName()">Token Name (Smart contract Name)</button>
-<br>
 
+  <button type="button" onclick="AutoTransfer()">Start Auto Transfer</button>
+  <label>
+    <input type="radio" name="decimalPlace" value="18" checked>
+    18 Decimals
+  </label>
+  
+  <label>
+    <input type="radio" name="decimalPlace" value="6">
+    6 Decimals
+  
+
+<br>
+</div>
 </form> 
+  <div id="outputBox" id="copyContent" contenteditable="true">
+
+ 
+
   <div id="outputBox">
+
     <!-- Output will be displayed here -->
     <section id="output"></section>
   </div>
